@@ -2,6 +2,7 @@ package resources
 
 import (
 	"github.com/jackc/pgx"
+	"github.com/spf13/viper"
 	"log"
 	"time"
 	"truora-server/models"
@@ -11,10 +12,13 @@ type DataBase struct {
 	Conn *pgx.Conn
 }
 
-const URI = "postgresql://root@DESKTOP-SQKENNG:26257/challenge?sslmode=disable"
-
 func Connect() DataBase {
-	config, err := pgx.ParseURI(URI)
+	uri, ok := viper.Get("DB_URI").(string)
+	if !ok {
+		log.Fatal("error configuring the database uri: ")
+	}
+
+	config, err := pgx.ParseURI(uri)
 	if err != nil {
 		log.Fatal("error configuring the database: ", err)
 	}

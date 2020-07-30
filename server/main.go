@@ -2,8 +2,10 @@ package main
 
 import (
 	"github.com/buaazp/fasthttprouter"
+	"github.com/spf13/viper"
 	"github.com/valyala/fasthttp"
 	"log"
+	"truora-server/config"
 	"truora-server/middleware"
 	"truora-server/resources"
 	"truora-server/services"
@@ -11,6 +13,7 @@ import (
 
 
 func main() {
+	config.ConfigEnvVariables()
 	db := resources.Connect()
 	domain := services.ServiceDomain{Database:db}
 
@@ -18,5 +21,10 @@ func main() {
 	router.GET("/info/:domain", domain.GetInfo)
 	router.GET("/history", domain.GetHistory)
 	defer db.Conn.Close()
-	log.Fatal(fasthttp.ListenAndServe(":5500", middleware.CORS(router.Handler)))
+
+	port, ok := viper.Get("PORT").(string)
+	if !ok {
+		port = "5500"
+	}
+	log.Fatal(fasthttp.ListenAndServe(":" + port, middleware.CORS(router.Handler)))
 }
