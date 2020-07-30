@@ -27,16 +27,20 @@ Por defecto el servidor corre en el puerto `8080`
 ## Backend
 
 ### Deploy
-Dentro de la carpeta truora-server ejecutar el siguiente comando
+Se requiere agregar el archivo .env en la carpeta raiz `server/` con las siguientes configuraciones
+- `PORT`: Puerto que escuchara la applicación
+- `DB_URI`: URI de la base de datos cockroachDB
+
+Dentro de la carpeta server ejecutar el siguiente comando
 ```bash
 go run main.go
 ```
 
-POor defecto el servidor corre en el puerto `5500`
+Por defecto el servidor corre en el puerto `5500`
 
 
 ## DataBase
-Asegurese de tener cockroacDB ejecutando un nodo lo puede hacer con el comando 
+Asegurese de tener cockroachDB ejecutando un nodo lo puede hacer con el comando 
 ```bash
 cockroach start-single-node --insecure
 ```
