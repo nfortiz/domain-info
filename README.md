@@ -1,5 +1,5 @@
-# Challenge truora
-Esta carpeta contiene la solución al reto de truora
+# Challenge Domain Info
+Esta carpeta contiene la solución al reto de progrmación
 
 ## Requerimientos
 - Go
