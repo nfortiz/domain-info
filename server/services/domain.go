@@ -42,11 +42,17 @@ func (d *ServiceDomain) GetInfo(ctx *fasthttp.RequestCtx) {
 
 		if difference.Hours() >= 1 {
 			response.PreviousSSLGrade = dataDomain.SSLGrade
-			oldServers, err := d.Database.GetDomainServers(domain)
+			oldServers, err := d.Database.GetServersByDomain(domain)
 			if !(err != nil && len(oldServers) == 0) {
 				if haveChanged(oldServers, response.Servers) {
 					response.ServersChanged = true
 					d.Database.UpdateDomainServersChanged(domain)
+					d.Database.DeleteServersByDomain(domain)
+					err = d.Database.CreateServers(response.Servers, domain)
+					if err != nil {
+						log.Fatal(err)
+					}
+
 				}
 			}
 		}
@@ -64,12 +70,11 @@ func (d *ServiceDomain) GetInfo(ctx *fasthttp.RequestCtx) {
 		}
 
 		//Save Servers in database
-		for _, server := range response.Servers {
-			err = d.Database.CreateServer(server, domain)
-			if err != nil {
-				log.Fatal(err)
-			}
+		err = d.Database.CreateServers(response.Servers, domain)
+		if err != nil {
+			log.Fatal(err)
 		}
+
 	}
 
 	enc.Encode(&response)

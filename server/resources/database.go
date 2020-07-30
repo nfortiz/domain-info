@@ -56,7 +56,7 @@ func initDB(conn *pgx.Conn) {
 		ssl_grade VARCHAR(2),
 		country VARCHAR(10),
 		owner VARCHAR(50),
-		domain VARCHAR(50),
+		domain VARCHAR(50) NOT NULL,
 		FOREIGN KEY (domain) REFERENCES domains(domain_name)
 		)
 		`); err != nil {
@@ -91,6 +91,23 @@ func (db *DataBase) CreateServer(newServer models.Server, domainName string) err
 		domainName); err != nil {
 		return  err
 	}
+	return nil
+}
+
+func (db *DataBase) CreateServers(servers []models.Server, domainName string) error {
+	for _, server := range servers {
+		if _, err := db.Conn.Exec(`INSERT INTO servers 
+			(address, ssl_grade, country, owner, domain)
+			VALUES($1, $2, $3, $4, $5)`,
+			server.Address,
+			server.SSLGrade,
+			server.Country,
+			server.Owner,
+			domainName); err != nil {
+			return  err
+		}
+	}
+
 	return nil
 }
 
@@ -174,7 +191,7 @@ func (db *DataBase) UpdateDomainServersChanged(domainName string) error {
 	return nil
 }
 
-func (db *DataBase) GetDomainServers(domainName string) ([]models.Server, error) {
+func (db *DataBase) GetServersByDomain(domainName string) ([]models.Server, error) {
 	var servers []models.Server
 	rows, err := db.Conn.Query("SELECT address, ssl_grade, country, owner FROM servers WHERE domain = $1", domainName)
 	if err != nil {
@@ -208,4 +225,12 @@ func(db *DataBase) GetServerByAddress(address string) models.Server {
 	}
 
 	return server
+}
+
+func (db *DataBase) DeleteServersByDomain(domain string) (int64, error) {
+	command, err := db.Conn.Exec("DELETE FROM servers WHERE domain=$1", domain)
+	if err != nil {
+		return 0, err
+	}
+	return command.RowsAffected(), err
 }
