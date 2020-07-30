@@ -34,3 +34,5 @@ yarn-error.log
 
 server/.env
 server/.idea
+
+frontend/node_modules

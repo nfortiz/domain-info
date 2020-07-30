@@ -7,7 +7,7 @@
         text-variant="white"
     >        
         <b-card-text>
-         Calificación del Servidor: <b-badge :variant="getVariant()"> {{ item.ssl_grade }} </b-badge>  
+         Calificación del Servidor: <b-badge :variant="getVariant()"> {{ item.ssl_grade || "No disponible" }} </b-badge>  
         </b-card-text>
     </b-card>
 </template>

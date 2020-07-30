@@ -8,7 +8,7 @@
            <img v-if="item.logo" :src="item.logo" style="height: "/> {{ item.title }}  
         </b-card-text>
         <b-card-footer v-if="disabled">
-            Calificación de SSLLabs: <b-badge :variant="getVariant()"> {{ item.ssl_grade }} </b-badge>
+            Calificación de SSLLabs: <b-badge :variant="getVariant()"> {{ item.ssl_grade || "No disponible" }} </b-badge>
         </b-card-footer>
         <b-button 
             v-if="!disabled" 

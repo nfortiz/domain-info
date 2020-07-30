@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import Domain from './DomainCard'
+import Domain from '../components/DomainCard'
 import { getDomain, getHistory } from '../utils/getData'
 
 export default {

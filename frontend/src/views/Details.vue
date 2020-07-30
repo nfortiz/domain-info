@@ -22,8 +22,8 @@
     </b-container>
 </template>
 <script>
-import DomainCard from './DomainCard'
-import ServerCard from './ServerCard'
+import DomainCard from '../components/DomainCard'
+import ServerCard from '../components/ServerCard'
 import { getDomain } from '../utils/getData'
 
 export default {
